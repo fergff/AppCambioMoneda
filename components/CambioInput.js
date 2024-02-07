@@ -107,17 +107,35 @@ export default function CambioInput({ onNewCambio, visible, onCancel }) {
 
 
   function textChangeHandler(enteredText) {
-    setNewCambio(enteredText);
-    setAmount(enteredText);
-    //El Cambio k pones con numeros
+    if (isNaN(enteredText)){
+      alert("Por favor Introduce un Numero");
+      setNewCambio("");
+    }else{
+      setNewCambio(enteredText);
+      setAmount(enteredText);
+      //El Cambio k pones con numeros
+    }
+   
+  }
+
+  function onCancell(){
+    setNewCambio("");
+    setSelectedCurrency(null);
+    setSelectedCurrency2(null);
+    onCancel();
   }
 
   function onPressHandler() { // aqui le envio a App todo la cantidad calculada el numero puesto las banderas...
-    if (newCambio) {
+    if (newCambio && selectedCurrency && selectedCurrency2) {
       const result = calcularCambio(Number(amount), fromCurrency, toCurrency);
       onNewCambio(result,Number(amount),currencies[fromCurrency].emoji,currencies[toCurrency].emoji,fromCurrency,toCurrency);
+      setNewCambio("");
+      setSelectedCurrency(null);
+      setSelectedCurrency2(null);
+    }else{
+      alert("Rellena todos los campos plis");
     }
-    setNewCambio("");
+    
   }
   //vista de la segunda pantalla
   return (
@@ -159,7 +177,7 @@ export default function CambioInput({ onNewCambio, visible, onCancel }) {
             <Button
               color="#e3771d"
               title='Cancel'
-              onPress={() => onCancel()}
+              onPress={onCancell}
             />
           </View>
 
